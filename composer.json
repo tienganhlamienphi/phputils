@@ -1,0 +1,16 @@
+{
+    "name": "talmp/phputils",
+    "description": "TALMP utility php lib",
+    "type": "library",
+    "require-dev": {
+        "phpunit/phpunit": "^9.5",
+        "psy/psysh": "^0.11.2"
+    },
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Talmp\\Phputils\\": "src/"
+        }
+    },
+    "require": {}
+}
