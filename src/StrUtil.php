@@ -4,10 +4,95 @@ namespace Talmp\Phputils;
 
 class StrUtil
 {
+    public static function replaceOnceIndex(
+        array $searches,
+        array $indexes,
+        array $replacements,
+        string $subject
+    ): string|false {
+        if (count($searches) === 0) {
+            return false;
+        }
+
+        // check searches and indexes match length and correct
+        if (count($searches) !== count($indexes)) {
+            return false;
+        }
+
+        // check if $search at $index is correct
+        foreach ($searches as $search_index => $search) {
+            if (! is_array($indexes[$search_index])) {
+                return false;
+            }
+
+            foreach ($indexes[$search_index] as $index) {
+                if (substr($subject, $index, strlen($search)) !== $search) {
+                    return false;
+                }
+            }
+        }
+
+        if (count($searches) !== count($replacements)) {
+            return false;
+        }
+
+        // check if indexes and searches overlap
+        $overlap_map = array_fill(0, strlen($subject), false);
+
+        foreach ($searches as $search_index => $search) {
+            foreach ($indexes[$search_index] as $index) {
+                for ($i = $index; $i < $index + strlen($search); $i++) {
+                    if (! $overlap_map[$i]) {
+                        $overlap_map[$i] = true;
+                        continue;
+                    }
+
+                    return false;
+                }
+            }
+        }
+
+        // 1. build replace map
+        $r_map = [];
+
+        foreach ($searches as $search_index => $search) {
+            $r_map[] = $indexes[$search_index];
+        }
+
+        // 2. relace by replace map AND update replace map
+        // (why update ? sometimes we need replace 'a' with 'bc'
+        // notice 'bc' have 2 characters and 'a' only have 1 ? that's why :)
+
+        foreach ($r_map as $r_map_k => $r_map_v) {
+            for ($i = 0; $i < count($r_map_v); $i++) {
+                $pos = $r_map[$r_map_k][$i];
+
+                $subject =
+                     static::replaceAtIndex(
+                         $searches[$r_map_k],
+                         $replacements[$r_map_k],
+                         $subject,
+                         $pos
+                     );
+
+                $r_map = static::updateReplaceMap(
+                    $r_map,
+                    $searches,
+                    $replacements,
+                    $searches[$r_map_k],
+                    $replacements[$r_map_k],
+                    $pos
+                );
+            }
+        }
+
+        return $subject;
+    }
+
     public static function replaceOnce(
         array $searches,
         array $replacements,
-        string $str
+        string $subject
     ): string|false {
         ////////////////////////////////////////////////////////
         // STRATEGY
@@ -30,7 +115,7 @@ class StrUtil
             return false;
         }
 
-        if (count($searches) == 0) {
+        if (count($searches) === 0) {
             return false;
         }
 
@@ -57,7 +142,7 @@ class StrUtil
         $r_map = [];
 
         foreach ($searches as $search) {
-            $r_map[] = static::multiStrpos($str, $search);
+            $r_map[] = static::multiStrpos($subject, $search);
         }
 
         // 2. relace by replace map AND update replace map
@@ -68,11 +153,11 @@ class StrUtil
             for ($i = 0; $i < count($r_map_v); $i++) {
                 $pos = $r_map[$r_map_k][$i];
 
-                $str =
+                $subject =
                      static::replaceAtIndex(
                          $searches[$r_map_k],
                          $replacements[$r_map_k],
-                         $str,
+                         $subject,
                          $pos
                      );
 
@@ -87,7 +172,7 @@ class StrUtil
             }
         }
 
-        return $str;
+        return $subject;
     }
 
     /**
@@ -115,7 +200,7 @@ class StrUtil
     protected static function replaceAtIndex(
         string $search,
         string $replace,
-        string $str,
+        string $subject,
         int $index
     ): string {
 
@@ -124,17 +209,20 @@ class StrUtil
         // eg:
         // $search = 'abc'
         // $replace = 'defh'
-        // $str = 'abcd abcd abcd'
-        // replaceAtIndex($search, $replace, $str, 0) => 'defhd abcd abcd'
-        // replaceAtIndex($search, $replace, $str, 5) => 'abcd defhd abcd'
-        // replaceAtIndex($search, $replace, $str, 1) // it wrong, tripple think it boiss
+        // $subject = 'abcd abcd abcd'
+        // replaceAtIndex($search, $replace, $subject, 0) => 'defhd abcd abcd'
+        // replaceAtIndex($search, $replace, $subject, 5) => 'abcd defhd abcd'
+        // replaceAtIndex($search, $replace, $subject, 1) // it wrong, tripple think it boiss
 
         return
-            substr($str, 0, $index).
+            substr($subject, 0, $index).
             $replace.
-            substr($str, strlen($search) + $index);
+            substr($subject, strlen($search) + $index);
     }
 
+    /**
+     *
+     */
     protected static function updateReplaceMap(
         array $replace_map,
         array $searches,

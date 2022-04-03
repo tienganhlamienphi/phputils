@@ -5,7 +5,7 @@ use Talmp\Phputils\StrUtil;
 
 class StrUtilTest extends TestCase
 {
-    public function test_generic()
+    public function test_replace_once()
     {
         // case 0
         // characters between key must be distinct
@@ -87,6 +87,81 @@ class StrUtilTest extends TestCase
             'a1\'\ \'\'\ \'bx010c',
              StrUtil::replaceOnce([' ', '0'], ['\'\ \'', 'x010'], 'a1  b0c')
         );
+    }
 
+    public function test_replace_once_index()
+    {
+        // case 0
+        // empty search
+        $this->assertFalse(
+            StrUtil::replaceOnceIndex([], [], ['str_replace'], "replace replace with str_replace")
+        );
+
+        // case 1
+        // searches count not equals indexes count
+        $this->assertFalse(
+            StrUtil::replaceOnceIndex(
+                ['replace'],
+                [],
+                ['str_replace'],
+                "replace replace with str_replace"
+            )
+        );
+
+        // case 2
+        // index element must be array
+        $this->assertFalse(
+            StrUtil::replaceOnceIndex(
+                ['replace'],
+                [7],
+                ['str_replace'],
+                "replace replace with str_replace"
+            )
+        );
+
+        // case 3
+        // search at index is not correct
+        $this->assertFalse(
+            StrUtil::replaceOnceIndex(
+                ['replace'],
+                [[7]],
+                ['str_replace'],
+                "replace replace with str_replace"
+            )
+        );
+
+        // case 4
+        // searches count not equals replacements count
+        $this->assertFalse(
+            StrUtil::replaceOnceIndex(
+                ['replace'],
+                [[8]],
+                ['str_replace', 'test'],
+                "replace replace with str_replace"
+            )
+        );
+
+        // case 5
+        // indexes and searches overlap
+        $this->assertFalse(
+            StrUtil::replaceOnceIndex(
+                ['replace', 'lace'],
+                [[8], [11]],
+                ['str_replace', 'test'],
+                "replace replace with str_replace"
+            )
+        );
+
+        // case 6
+        // correct case
+        $this->assertEquals(
+            "replace str_replace with str_replace",
+            StrUtil::replaceOnceIndex(
+                ['replace'],
+                [[8]],
+                ['str_replace'],
+                "replace replace with str_replace"
+            )
+        );
     }
 }
