@@ -26,7 +26,7 @@ class StrUtil
             }
 
             foreach ($indexes[$search_index] as $index) {
-                if (substr($subject, $index, strlen($search)) !== $search) {
+                if (mb_substr($subject, $index, mb_strlen($search)) !== $search) {
                     return false;
                 }
             }
@@ -37,11 +37,11 @@ class StrUtil
         }
 
         // check if indexes and searches overlap
-        $overlap_map = array_fill(0, strlen($subject), false);
+        $overlap_map = array_fill(0, mb_strlen($subject), false);
 
         foreach ($searches as $search_index => $search) {
             foreach ($indexes[$search_index] as $index) {
-                for ($i = $index; $i < $index + strlen($search); $i++) {
+                for ($i = $index; $i < $index + mb_strlen($search); $i++) {
                     if (! $overlap_map[$i]) {
                         $overlap_map[$i] = true;
                         continue;
@@ -121,14 +121,14 @@ class StrUtil
 
         $pair_count = count($searches);
 
-        $k_character_set = array_unique(str_split($searches[0]));
+        $k_character_set = array_unique(mb_str_split($searches[0]));
 
         for ($i = 0; $i < $pair_count; $i++) {
             if ($i === 0) {
                 continue;
             }
 
-            $chars = str_split($searches[$i]);
+            $chars = mb_str_split($searches[$i]);
 
             if (! empty(array_intersect($k_character_set, $chars))) {
                 return false;
@@ -188,10 +188,10 @@ class StrUtil
 
         $pos_last = 0;
 
-        while (($pos_last = strpos($haystack, $needle, $pos_last)) !== false) {
+        while (($pos_last = mb_strpos($haystack, $needle, $pos_last)) !== false) {
             $positions[] = $pos_last;
 
-            $pos_last = $pos_last + strlen($needle);
+            $pos_last = $pos_last + mb_strlen($needle);
         }
 
         return $positions;
@@ -215,9 +215,9 @@ class StrUtil
         // replaceAtIndex($search, $replace, $subject, 1) // it wrong, tripple think it boiss
 
         return
-            substr($subject, 0, $index).
+            mb_substr($subject, 0, $index).
             $replace.
-            substr($subject, strlen($search) + $index);
+            mb_substr($subject, mb_strlen($search) + $index);
     }
 
     /**
@@ -284,7 +284,7 @@ class StrUtil
 
         foreach ($replace_map[$search_idx] as $r_map_k => $r_map_v) {
             $replace_map[$search_idx][$r_map_k] =
-                $r_map_v + (+ strlen($replace) - strlen($search));
+                $r_map_v + (+ mb_strlen($replace) - mb_strlen($search));
         }
 
         foreach ($replace_map as $r_map_k => $r_map_v) {
@@ -297,7 +297,7 @@ class StrUtil
                     continue;
                 }
 
-                $replace_map[$r_map_k][$r_map_v_k] += (+ strlen($replace) - strlen($search));
+                $replace_map[$r_map_k][$r_map_v_k] += (+ mb_strlen($replace) - mb_strlen($search));
             }
         }
 

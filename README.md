@@ -20,6 +20,9 @@ str_replace([12, 23], [23, 45], '1223') // '4545'
 StrUtil::replaceOnce([12, 23], [23, 45], '1223') // false
 ```
 
+## Requirement
+Need mbstring extension
+
 ## Installation
 
 Use the package manager [composer](https://getcomposer.org/) to install phputils.
