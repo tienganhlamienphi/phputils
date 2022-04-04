@@ -180,7 +180,7 @@ class StrUtil
      * @param string $needle
      * @return array<int, int<0, max>>
      */
-    protected static function multiStrpos(string $haystack, string $needle): array
+    public static function multiStrpos(string $haystack, string $needle): array
     {
         // https://gist.github.com/vielhuber/de9542d5fead3b3709c60b13e1350a92
 
