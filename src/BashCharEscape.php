@@ -38,6 +38,8 @@ class BashCharEscape
         $quote = $configs['quote'];
         $over_ride = $configs['over_ride'];
 
+        // https://www.php.net/manual/en/function.escapeshellcmd.php
+
         return $over_ride + [
 
             // single quote
@@ -63,6 +65,9 @@ class BashCharEscape
 
             // left square bracket
             "[" => "$lbs$quote$hbs"."["."$lbs$quote",
+
+            // left curly bracket
+            "{" => "$lbs$quote$hbs"."{"."$lbs$quote",
 
             // right curly bracket
             "}" => "$lbs$quote$hbs"."}"."$lbs$quote",
@@ -98,8 +103,13 @@ class BashCharEscape
             "!" => "$lbs$quote$hbs!$lbs$quote",
 
             // caret, circumflex
-            "^" => "$lbs$quote$hbs^$lbs$quote"
+            "^" => "$lbs$quote$hbs^$lbs$quote",
 
+            // \x0A
+            "\x0A" => "$lbs$quote$hbs\x0A$lbs$quote",
+
+            // \xFF
+            "\xFF" => "$lbs$quote$hbs\xFF$lbs$quote",
         ];
     }
 }
