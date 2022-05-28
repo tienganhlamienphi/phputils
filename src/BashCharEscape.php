@@ -66,6 +66,9 @@ class BashCharEscape
             // left square bracket
             "[" => "$lbs$quote$hbs"."["."$lbs$quote",
 
+            // right square bracket
+            "]" => "$lbs$quote$hbs"."]"."$lbs$quote",
+
             // left curly bracket
             "{" => "$lbs$quote$hbs"."{"."$lbs$quote",
 
@@ -79,31 +82,43 @@ class BashCharEscape
             ">" => "$lbs$quote$hbs".">"."$lbs$quote",
 
             // vertical line
-            "|" => "$lbs$quote$hbs|$lbs$quote",
+            "|" => "$lbs$quote$hbs"."|"."$lbs$quote",
 
             // space
-            " " => "$lbs$quote$hbs $lbs$quote",
+            " " => "$lbs$quote$hbs"." "."$lbs$quote",
 
             // semicolon
-            ";" => "$lbs$quote$hbs;$lbs$quote",
+            ";" => "$lbs$quote$hbs".";"."$lbs$quote",
 
             // question mark
             "?" => "$lbs$quote$hbs"."?"."$lbs$quote",
 
             // ampersand (and)
-            "&" => "$lbs$quote$hbs&$lbs$quote",
+            "&" => "$lbs$quote$hbs"."&"."$lbs$quote",
 
             // minus
-            "-" => "$lbs$quote$hbs-$lbs$quote",
+            "-" => "$lbs$quote$hbs"."-"."$lbs$quote",
 
             // dollar sign
             "$" => "$lbs$quote$hbs$$lbs$quote",
 
             // exclamation mark, bang
-            "!" => "$lbs$quote$hbs!$lbs$quote",
+            "!" => "$lbs$quote$hbs"."!"."$lbs$quote",
 
             // caret, circumflex
-            "^" => "$lbs$quote$hbs^$lbs$quote",
+            "^" => "$lbs$quote$hbs"."^"."$lbs$quote",
+
+            // number sign
+            "#" => "$lbs$quote$hbs"."#"."$lbs$quote",
+
+            // tilde
+            "~" => "$lbs$quote$hbs"."~"."$lbs$quote",
+
+            // dot
+            "." => "$lbs$quote$hbs"."."."$lbs$quote",
+
+            // comma
+            "," => "$lbs$quote$hbs".","."$lbs$quote",
 
             // \x0A
             "\x0A" => "$lbs$quote$hbs\x0A$lbs$quote",
