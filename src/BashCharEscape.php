@@ -43,25 +43,25 @@ class BashCharEscape
         return $over_ride + [
 
             // single quote
-            "'" => "$lbs$quote$hbs'$lbs$quote",
+            "'" => "$lbs$quote$hbs"."'"."$lbs$quote",
 
             // double quote
-            "\"" => "$lbs$quote$hbs\"$lbs$quote",
+            "\"" => "$lbs$quote$hbs"."\""."$lbs$quote",
 
             // back quote
-            "`" => "$lbs$quote$hbs`$lbs$quote",
+            "`" => "$lbs$quote$hbs"."`"."$lbs$quote",
 
             // backslash
-            "\\" => "$lbs$quote$hbs\\$lbs$quote",
+            "\\" => "$lbs$quote$hbs"."\\"."$lbs$quote",
 
             // asterisk
-            "*" => "$lbs$quote$hbs*$lbs$quote",
+            "*" => "$lbs$quote$hbs"."*"."$lbs$quote",
 
             // left parenthesis
-            "(" => "$lbs$quote$hbs($lbs$quote",
+            "(" => "$lbs$quote$hbs"."("."$lbs$quote",
 
             // right parenthesis
-            ")" => "$lbs$quote$hbs)$lbs$quote",
+            ")" => "$lbs$quote$hbs".")"."$lbs$quote",
 
             // left square bracket
             "[" => "$lbs$quote$hbs"."["."$lbs$quote",
@@ -121,10 +121,10 @@ class BashCharEscape
             "," => "$lbs$quote$hbs".","."$lbs$quote",
 
             // \x0A
-            "\x0A" => "$lbs$quote$hbs\x0A$lbs$quote",
+            "\x0A" => "$lbs$quote$hbs"."\x0A"."$lbs$quote",
 
             // \xFF
-            "\xFF" => "$lbs$quote$hbs\xFF$lbs$quote",
+            "\xFF" => "$lbs$quote$hbs"."\xFF"."$lbs$quote",
         ];
     }
 }

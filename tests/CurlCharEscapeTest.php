@@ -11,9 +11,6 @@ class CurlCharEscapeTest extends TestCase
 
         $this->assertEquals('\\\\\\$', CurlCharEscape::escape('$', '\\', '\\\\\\'));
 
-        // not escape
-        $this->assertEquals('{', CurlCharEscape::escape('{', '\\', '\\\\\\',["'" => '']));
-
         // override
         $this->assertEquals(
             'abc',

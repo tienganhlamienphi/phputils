@@ -35,61 +35,93 @@ class CurlCharEscape
         $hbs = $configs['hbs'];
         $over_ride = $configs['over_ride'];
 
+        // https://www.php.net/manual/en/function.escapeshellcmd.php
+
         return $over_ride + [
+
+            // single quote
+            "'" => "$hbs"."'",
+
+            // double quote
+            "\"" => "$hbs"."\"",
+
+            // back quote
+            "`" => "$hbs"."`",
 
             // backslash
             "\\" => "$hbs\\$hbs\\",
 
-            // single quote
-            "'" => "$hbs'",
-
-            // double quote
-            "\"" => "$hbs\"",
-
-            // back quote
-            "`" => "$hbs`",
-
             // asterisk
-            "*" => "$lbs*",
+            "*" => "$lbs"."*",
 
             // left parenthesis
-            "(" => "$lbs(",
+            "(" => "$lbs"."(",
 
             // right parenthesis
-            ")" => "$lbs)",
+            ")" => "$lbs".")",
 
             // left square bracket
             "[" => "$lbs"."[",
 
+            // right square bracket
+            "]" => "$lbs"."]",
+
+            // left curly bracket
+            "{" => "$lbs"."{",
+
             // right curly bracket
-            "}" => "$lbs}",
+            "}" => "$lbs"."}",
 
             // less than sign
-            "<" => "$lbs<",
+            "<" => "$lbs"."<",
 
             // greater than sign
-            ">" => "$lbs>",
+            ">" => "$lbs".">",
 
             // vertical line
-            "|" => "$lbs|",
+            "|" => "$lbs"."|",
+
+            // space
+            " " => "$lbs"." ",
 
             // semicolon
-            ";" => "$lbs;",
+            ";" => "$lbs".";",
 
             // question mark
-            "?" => "$lbs?",
-
-            // equal
-            "=" => "$lbs=",
-
-            // pound
-            "#" => "$lbs#",
+            "?" => "$lbs"."?",
 
             // ampersand (and)
-            "&" => "$lbs&",
+            "&" => "$lbs"."&",
 
-            // dollar
+            // minus
+            "-" => "$lbs"."-",
+
+            // dollar sign
             "$" => "$hbs$",
+
+            // exclamation mark, bang
+            "!" => "$lbs"."!",
+
+            // caret, circumflex
+            "^" => "$lbs"."^",
+
+            // number sign
+            "#" => "$lbs"."#",
+
+            // tilde
+            "~" => "$lbs"."~",
+
+            // dot
+            "." => "$lbs".".",
+
+            // comma
+            "," => "$lbs".",",
+
+            // \x0A
+            "\x0A" => "$lbs"."\x0A",
+
+            // \xFF
+            "\xFF" => "$lbs"."\xFF",
         ];
     }
 }
