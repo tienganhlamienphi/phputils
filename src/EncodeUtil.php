@@ -24,7 +24,7 @@ class EncodeUtil
         int $level = 6
     ): string|false {
         if (is_null($dest_path)) {
-            $dest_path = $source_path.'gz';
+            $dest_path = $source_path.'.gz';
         }
 
         $mode = 'wb'.$level;

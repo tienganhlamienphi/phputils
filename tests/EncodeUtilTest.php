@@ -50,7 +50,7 @@ class EncodeUtilTest extends TestCase
 
         $dest_path = EncodeUtil::gzipFile($file_path);
 
-        $this->assertEquals($dest_path, $file_path.'gz');
+        $this->assertEquals($dest_path, $file_path.'.gz');
 
         $this->assertTrue(file_exists($dest_path));
 
