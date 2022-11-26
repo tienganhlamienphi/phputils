@@ -12,6 +12,8 @@ class StrUtil
         int $limit = PHP_INT_MAX,
         int $min_length = 1,
     ): array {
+        $string = mb_strtolower($string);
+
         $explode_arr = explode($separator, $string, $limit);
 
         $result = [];

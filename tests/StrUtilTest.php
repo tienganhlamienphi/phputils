@@ -7,7 +7,17 @@ class StrUtilTest extends TestCase
 {
     public function test_to_searchable_phrases()
     {
+        $this->assertEquals(
+            StrUtil::toSearchablePhrases('léon'),
+            StrUtil::toSearchablePhrases('Léon')
+        );
+
         $this->assertEquals(16, count(StrUtil::toSearchablePhrases('léon')));
+
+        $this->assertEquals(
+            StrUtil::toSearchablePhrases('amélie'),
+            StrUtil::toSearchablePhrases('AméLie')
+        );
 
         $this->assertEquals(32, count(StrUtil::toSearchablePhrases('amélie')));
     }
