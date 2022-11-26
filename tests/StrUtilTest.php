@@ -5,6 +5,13 @@ use Talmp\Phputils\StrUtil;
 
 class StrUtilTest extends TestCase
 {
+    public function test_to_searchable_phrases()
+    {
+        $this->assertEquals(16, count(StrUtil::toSearchablePhrases('léon')));
+
+        $this->assertEquals(32, count(StrUtil::toSearchablePhrases('amélie')));
+    }
+
     public function test_replace_once()
     {
         // case 0

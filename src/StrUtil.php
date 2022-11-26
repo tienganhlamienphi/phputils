@@ -2,8 +2,64 @@
 
 namespace Talmp\Phputils;
 
+use voku\helper\ASCII;
+
 class StrUtil
 {
+    public static function toSearchablePhrases(
+        string $string,
+        string $separator = ' ',
+        int $limit = PHP_INT_MAX,
+        int $min_length = 1,
+    ): array {
+        $explode_arr = explode($separator, $string, $limit);
+
+        $result = [];
+
+        // in case input string is not ascii
+        // eg: léon
+        // and with min_length = 1
+        // we will split it into
+        // ['l', 'é', 'e', 'o', 'n', 'lé', 'le', 'éo', 'eo', 'on', 'léo', 'leo', 'éon', 'eon', 'léon', 'leon']
+
+        foreach ($explode_arr as $sub_string) {
+            $mb_str_split = mb_str_split($sub_string);
+
+            $sub_string_length = count($mb_str_split);
+            $pointer = 0;
+
+            while (true) {
+                if ($pointer > $sub_string_length - 1) {
+                    break;
+                }
+                
+                $length = 1;
+
+                while ($pointer + $length < $sub_string_length + 1) {
+                    $result[implode('', array_slice($mb_str_split, $pointer, $length))] = true;
+                    $result[static::ascii(implode('', array_slice($mb_str_split, $pointer, $length)))] = true;
+                    $length += 1;
+                }
+
+                $pointer += 1;
+            }
+        }
+
+        return array_keys($result);
+    }
+
+    /**
+     * Transliterate a UTF-8 value to ASCII.
+     *
+     * @param  string  $value
+     * @param  string  $language
+     * @return string
+     */
+    public static function ascii(string $value, string $language = 'en')
+    {
+        return ASCII::to_ascii($value, $language);
+    }
+
     public static function replaceOnceIndex(
         array $searches,
         array $indexes,
