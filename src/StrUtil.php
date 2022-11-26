@@ -8,9 +8,9 @@ class StrUtil
 {
     public static function toSearchablePhrases(
         string $string,
+        int $min_length = 1,
         string $separator = ' ',
         int $limit = PHP_INT_MAX,
-        int $min_length = 1,
     ): array {
         $string = mb_strtolower($string);
 
@@ -35,7 +35,7 @@ class StrUtil
                     break;
                 }
                 
-                $length = 1;
+                $length = $min_length;
 
                 while ($pointer + $length < $sub_string_length + 1) {
                     $result[implode('', array_slice($mb_str_split, $pointer, $length))] = true;

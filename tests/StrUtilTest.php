@@ -14,12 +14,32 @@ class StrUtilTest extends TestCase
 
         $this->assertEquals(16, count(StrUtil::toSearchablePhrases('léon')));
 
+        $this->assertEquals(16, count(StrUtil::toSearchablePhrases('léon')));
+
         $this->assertEquals(
             StrUtil::toSearchablePhrases('amélie'),
             StrUtil::toSearchablePhrases('AméLie')
         );
 
         $this->assertEquals(32, count(StrUtil::toSearchablePhrases('amélie')));
+
+        $this->assertEquals(
+            StrUtil::toSearchablePhrases('amélie', 4),
+            [
+                "amél",
+                "amel",
+                "améli",
+                "ameli",
+                "amélie",
+                "amelie",
+                "méli",
+                "meli",
+                "mélie",
+                "melie",
+                "élie",
+                "elie",
+            ]
+        );
     }
 
     public function test_replace_once()
