@@ -6,6 +6,9 @@ use voku\helper\ASCII;
 
 class StrUtil
 {
+    /**
+     * @return array<string>
+     */
     public static function toSearchablePhrases(
         string $string,
         int $min_length = 1,
@@ -22,7 +25,12 @@ class StrUtil
         // eg: léon
         // and with min_length = 1
         // we will split it into
-        // ['l', 'é', 'e', 'o', 'n', 'lé', 'le', 'éo', 'eo', 'on', 'léo', 'leo', 'éon', 'eon', 'léon', 'leon']
+        // [
+        //     'l', 'é', 'e', 'o', 'n',
+        //     'lé', 'le', 'éo', 'eo', 'on',
+        //     'léo', 'leo', 'éon', 'eon',
+        //     'léon', 'leon'
+        // ]
 
         foreach ($explode_arr as $sub_string) {
             $mb_str_split = mb_str_split($sub_string);
@@ -38,8 +46,16 @@ class StrUtil
                 $length = $min_length;
 
                 while ($pointer + $length < $sub_string_length + 1) {
-                    $result[implode('', array_slice($mb_str_split, $pointer, $length))] = true;
-                    $result[static::ascii(implode('', array_slice($mb_str_split, $pointer, $length)))] = true;
+                    $result[
+                        implode('', array_slice($mb_str_split, $pointer, $length))
+                    ] = true;
+
+                    $result[
+                        static::ascii(
+                            implode('', array_slice($mb_str_split, $pointer, $length))
+                        )
+                    ] = true;
+
                     $length += 1;
                 }
 
@@ -50,18 +66,48 @@ class StrUtil
         return array_keys($result);
     }
 
+    public static function questionMarkToSqlParameterizedPlaceHolder(
+        string $string,
+        int $limit = 65536 /* default postgres limit */
+    ): string|false {
+        $multi_strpos = StrUtil::multiStrpos($string, '?');
+
+        $count_multi_strpos = count($multi_strpos);
+
+        if ($count_multi_strpos === 0) {
+            return $string;
+        }
+
+        if (count($multi_strpos) > $limit) {
+            return false;
+        }
+
+        $searches = array_fill(0, count($multi_strpos), '?');
+        $indexes = [];
+        $replacements = [];
+
+        for ($i = 0; $i < $count_multi_strpos; $i++) {
+            $indexes[] = [$multi_strpos[$i]];
+            $replacements[] = '$'.($i + 1);
+        }
+
+        return StrUtil::replaceOnceIndex($searches, $indexes, $replacements, $string);
+    }
+
     /**
      * Transliterate a UTF-8 value to ASCII.
-     *
-     * @param  string  $value
-     * @param  string  $language
-     * @return string
      */
-    public static function ascii(string $value, string $language = 'en')
+    public static function ascii(string $value, string $language = 'en'): string
     {
         return ASCII::to_ascii($value, $language);
     }
 
+    /**
+     * @param array<string> $searches
+     * @param array<array<int>> $indexes
+     * @param array<string> $replacements
+     * @param string $subject
+     */
     public static function replaceOnceIndex(
         array $searches,
         array $indexes,
@@ -147,6 +193,10 @@ class StrUtil
         return $subject;
     }
 
+    /**
+     * @param array<string> $searchs
+     * @param array<string> $replacements
+     */
     public static function replaceOnce(
         array $searches,
         array $replacements,
@@ -238,7 +288,7 @@ class StrUtil
      * @param string $needle
      * @return array<int, int<0, max>>
      */
-    public static function multiStrpos(string $haystack, string $needle): array
+    protected static function multiStrpos(string $haystack, string $needle): array
     {
         // https://gist.github.com/vielhuber/de9542d5fead3b3709c60b13e1350a92
 

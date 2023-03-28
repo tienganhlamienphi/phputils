@@ -201,4 +201,37 @@ class StrUtilTest extends TestCase
             )
         );
     }
+
+    public function test_question_mark_to_sql_parameterized_placeholder()
+    {
+        // empty string should return the same
+        $this->assertEquals(
+            StrUtil::questionMarkToSqlParameterizedPlaceHolder(''),
+            ''
+        );
+
+        // string with no question mark should return the same
+        $str = base64_encode(random_bytes(500)); // 1000 chars
+        $this->assertEquals(
+            StrUtil::questionMarkToSqlParameterizedPlaceHolder($str),
+            $str
+        );
+
+        // normal string
+        $this->assertEquals(
+            StrUtil::questionMarkToSqlParameterizedPlaceHolder('? ? ?'),
+            '$1 $2 $3'
+        );
+
+        // more question mark than limit
+        $this->assertFalse(
+            StrUtil::questionMarkToSqlParameterizedPlaceHolder('? ?', 1)
+        );
+
+        // equal limit is fine
+        $this->assertEquals(
+            'a$1 $2',
+            StrUtil::questionMarkToSqlParameterizedPlaceHolder('a? ?', 2)
+        );
+    }
 }
