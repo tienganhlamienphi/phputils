@@ -296,7 +296,13 @@ class StrUtil
 
         $pos_last = 0;
 
-        while (($pos_last = mb_strpos($haystack, $needle, $pos_last)) !== false) {
+        while (true) {
+            $pos_last = strpos($haystack, $needle, $pos_last);
+
+            if ($pos_last === false) {
+                break;
+            }
+
             $positions[] = $pos_last;
 
             $pos_last = $pos_last + mb_strlen($needle);
