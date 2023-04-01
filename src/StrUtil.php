@@ -78,11 +78,11 @@ class StrUtil
             return $string;
         }
 
-        if (count($multi_strpos) > $limit) {
+        if ($count_multi_strpos > $limit) {
             return false;
         }
 
-        $searches = array_fill(0, count($multi_strpos), '?');
+        $searches = array_fill(0, $count_multi_strpos, '?');
         $indexes = [];
         $replacements = [];
 
@@ -130,7 +130,7 @@ class StrUtil
             }
 
             foreach ($indexes[$search_index] as $index) {
-                if (mb_substr($subject, $index, mb_strlen($search)) !== $search) {
+                if (substr($subject, $index, strlen($search)) !== $search) {
                     return false;
                 }
             }
@@ -141,11 +141,11 @@ class StrUtil
         }
 
         // check if indexes and searches overlap
-        $overlap_map = array_fill(0, mb_strlen($subject), false);
+        $overlap_map = array_fill(0, strlen($subject), false);
 
         foreach ($searches as $search_index => $search) {
             foreach ($indexes[$search_index] as $index) {
-                for ($i = $index; $i < $index + mb_strlen($search); $i++) {
+                for ($i = $index; $i < $index + strlen($search); $i++) {
                     if (! $overlap_map[$i]) {
                         $overlap_map[$i] = true;
                         continue;
@@ -229,14 +229,14 @@ class StrUtil
 
         $pair_count = count($searches);
 
-        $k_character_set = array_unique(mb_str_split($searches[0]));
+        $k_character_set = array_unique(str_split($searches[0]));
 
         for ($i = 0; $i < $pair_count; $i++) {
             if ($i === 0) {
                 continue;
             }
 
-            $chars = mb_str_split($searches[$i]);
+            $chars = str_split($searches[$i]);
 
             if (! empty(array_intersect($k_character_set, $chars))) {
                 return false;
@@ -290,25 +290,25 @@ class StrUtil
      */
     protected static function multiStrpos(string $haystack, string $needle): array
     {
-        // https://gist.github.com/vielhuber/de9542d5fead3b3709c60b13e1350a92
+        $haystack_length = strlen($haystack);
 
-        $positions = [];
+        $needle_strlen = strlen($needle);
 
-        $pos_last = 0;
+        // initiate array to prevent double size array move byte around
+        $result = [];
 
-        while (true) {
-            $pos_last = strpos($haystack, $needle, $pos_last);
+        $before_result = $result;
 
-            if ($pos_last === false) {
-                break;
+        for ($i = 0; $i < $haystack_length; $i++) {
+
+            if (
+                substr($haystack, $i, $needle_strlen) === $needle
+            ) {
+                $result[] = $i;
             }
-
-            $positions[] = $pos_last;
-
-            $pos_last = $pos_last + mb_strlen($needle);
         }
 
-        return $positions;
+        return $result;
     }
 
     protected static function replaceAtIndex(
@@ -329,9 +329,9 @@ class StrUtil
         // replaceAtIndex($search, $replace, $subject, 1) // it wrong, tripple think it boiss
 
         return
-            mb_substr($subject, 0, $index).
+            substr($subject, 0, $index).
             $replace.
-            mb_substr($subject, mb_strlen($search) + $index);
+            substr($subject, strlen($search) + $index);
     }
 
     /**
@@ -398,7 +398,7 @@ class StrUtil
 
         foreach ($replace_map[$search_idx] as $r_map_k => $r_map_v) {
             $replace_map[$search_idx][$r_map_k] =
-                $r_map_v + (+ mb_strlen($replace) - mb_strlen($search));
+                $r_map_v + (+ strlen($replace) - strlen($search));
         }
 
         foreach ($replace_map as $r_map_k => $r_map_v) {
@@ -411,7 +411,7 @@ class StrUtil
                     continue;
                 }
 
-                $replace_map[$r_map_k][$r_map_v_k] += (+ mb_strlen($replace) - mb_strlen($search));
+                $replace_map[$r_map_k][$r_map_v_k] += (+ strlen($replace) - strlen($search));
             }
         }
 
