@@ -5,7 +5,7 @@ use Talmp\Phputils\CurlCharEscape;
 
 class CurlCharEscapeTest extends TestCase
 {
-    public function test_bash_char_escape()
+    public function test_bash_char_escape(): void
     {
         $this->assertEquals('\\?', CurlCharEscape::escape('?', '\\', '\\\\\\'));
 

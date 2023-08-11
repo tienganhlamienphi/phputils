@@ -5,7 +5,7 @@ use Talmp\Phputils\StrUtil;
 
 class StrUtilTest extends TestCase
 {
-    public function test_to_searchable_phrases()
+    public function test_to_searchable_phrases(): void
     {
         $this->assertEquals(
             StrUtil::toSearchablePhrases('léon'),
@@ -42,7 +42,7 @@ class StrUtilTest extends TestCase
         );
     }
 
-    public function test_replace_once()
+    public function test_replace_once(): void
     {
         // case 0
         // characters between key must be distinct
@@ -126,7 +126,7 @@ class StrUtilTest extends TestCase
         );
     }
 
-    public function test_replace_once_index()
+    public function test_replace_once_index(): void
     {
         // case 0
         // empty search
@@ -202,7 +202,7 @@ class StrUtilTest extends TestCase
         );
     }
 
-    public function test_question_mark_to_sql_parameterized_placeholder()
+    public function test_question_mark_to_sql_parameterized_placeholder(): void
     {
         // empty string should return the same
         $this->assertEquals(

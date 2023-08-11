@@ -6,7 +6,7 @@ use Talmp\Phputils\EncodeUtil;
 
 class EncodeUtilTest extends TestCase
 {
-    public function test_base64_encode_decode_url()
+    public function test_base64_encode_decode_url(): void
     {
         $string = bin2hex(openssl_random_pseudo_bytes(rand(100, 200)));
 
@@ -21,7 +21,7 @@ class EncodeUtilTest extends TestCase
         $this->assertEquals($string, $decoded_str);
     }
 
-    public function test_gzip_file()
+    public function test_gzip_file(): void
     {
         $faker = Faker\Factory::create();
 

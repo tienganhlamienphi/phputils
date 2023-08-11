@@ -5,7 +5,7 @@ use PHPUnit\Framework\TestCase;
 
 class BashCharEscapeTest extends TestCase
 {
-    public function test_bash_char_escape()
+    public function test_bash_char_escape(): void
     {
         $this->assertEquals('\\\'\\\\\\}\\\'', BashCharEscape::escape('}', '\\', '\\\\\\', "'"));
 

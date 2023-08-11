@@ -5,7 +5,7 @@ use Talmp\Phputils\CLIUtil;
 
 class CLIUtilTest extends TestCase
 {
-    public function test_kill_process_tree()
+    public function test_kill_process_tree(): void
     {
         $pid = $this->helper_fork();
 
