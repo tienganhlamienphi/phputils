@@ -13,7 +13,7 @@ class Mutex
     }
 
     public function lock(
-        float $timeout = INF /* microseconds */
+        float $timeout = 0 /* microseconds */
     ): bool {
         $timepass = 0;
 
